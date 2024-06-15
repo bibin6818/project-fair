@@ -16,7 +16,10 @@ const Home = () => {
               <p style={{ textAlign: 'justify' }}>
                 One Stop Destination For All Software Development Projects.Where User Can Add Manage Their Projects. As Well As Access All Projects Avilable In Our Website...What Are You Waiting For!!!
               </p>
-              <Link to='/login' className='btn btn-warning'>START TO EXPLORE</Link>
+{ sessionStorage.getItem("token")?
+  <Link to='/dashboard' className='btn btn-warning'>MANAGE YOUR PROJECTS</Link>
+  :
+ <Link to='/login' className='btn btn-warning'>START TO EXPLORE</Link>}
 
             </div>
             <div className='col-lg-6'>
