@@ -1,10 +1,39 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Link,useNavigate } from 'react-router-dom'
 import landingImg from '../assets/reminder.png'
 import ProjectCard from '../components/ProjectCard'
 import { Card } from 'react-bootstrap'
+import { homeProjectAPI } from '../services/allAPI'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const Home = () => {
+  const [homeProjects,setHomeProjects]=useState([])
+  const navigate = useNavigate()
+
+  // console.log(homeProjects);
+  useEffect(()=>{
+    getHomeProjects()
+  },[])
+  const getHomeProjects = async ()=>{
+    try{
+      const result = await homeProjectAPI()
+      // console.log(result);
+      if(result.status==200){
+        setHomeProjects(result.data)
+      }
+    }catch(err){
+      console.log(err);
+    }
+  }
+  const handleProject =()=>{
+    if(sessionStorage.getItem("token")){
+      navigate('/projects')
+    }else{
+      toast.warning("Please login to get full access to our projects!!!")
+    }
+ }
   return (
     <>
       <div style={{ minHeight: '100vh' }} className="d-flex justify-content-center align-items-center rounded shadow w-100">
@@ -32,12 +61,16 @@ const Home = () => {
         <h1 className='mb-5'> Explore Our Projects </h1>
         <marquee>
           <div className='d-flex'>
-            <div className='me-5'>
-              <ProjectCard />
-            </div>
+           {
+            homeProjects?.length>0 && homeProjects?.map(project=>(
+            <div key={project?.id} className='me-5'>
+              <ProjectCard displayData={project}/>
+              </div>
+            ))
+             }
           </div>
         </marquee>
-        <button className='btn btn-link mt-3'>
+        <button onClick={handleProject} className='btn btn-link mt-3'>
           CLICK HERE TO VIEW MORE PROJECTS...
         </button>
       </div>
@@ -109,6 +142,8 @@ const Home = () => {
 
 
         </div>
+        <ToastContainer position='top-center' theme='colored' autoclose={3000}/>
+
       </div>
     </>
   )

@@ -21,7 +21,7 @@ const Auth = ({insideRegister}) => {
       try{
         //api call
         const result = await registerAPI(userData)
-        console.log(result);
+        // console.log(result);
         if(result.status==200){
           toast.warning(`Welcome ${result?.data?.username}... Please login to explore our website`)
           setUserData({
