@@ -1,11 +1,13 @@
-import React,{useState} from 'react'
+import React,{useContext, useState} from 'react'
 import loginimg from '../assets/loginpng.png'
 import { FloatingLabel, Form,Spinner } from 'react-bootstrap'
 import { Link,  useNavigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {loginAPI, registerAPI} from '../services/allAPI'
+import { tokenAuthContext } from '../contexts/AuthContex';
 const Auth = ({insideRegister}) => {
+  const {isAuthorised,setIsAuthorised} = useContext(tokenAuthContext)
   const [isLoggedin,setIsLoggedin] = useState(false)
 
   const [userData,setUserData] = useState({
@@ -57,7 +59,8 @@ const Auth = ({insideRegister}) => {
           if(result.status==200){
             setIsLoggedin(true)
             sessionStorage.setItem("user",JSON.stringify(result.data.user))
-            sessionStorage.setItem("token",result.data.token)             
+            sessionStorage.setItem("token",result.data.token)   
+            setIsAuthorised(true)          
               setTimeout(()=>{
                 // toast.warning(`Welcome ${result.data.user.username}...`)
 
